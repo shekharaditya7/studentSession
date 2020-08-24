@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentsessionapp.adapters.SubscribeRecyclerAdapter
@@ -40,8 +41,8 @@ class SubscribedSessionActivity : AppCompatActivity(),SubscribeRecyclerAdapter.O
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setRecyclerViewAdapter(list : List <Session>) {
-        val session_filtered =list.filter { session -> LocalDate.parse(session.session_date).isAfter(
-            LocalDate.now())
+        val session_filtered =list.filter { session ->(LocalDate.parse(session.session_date).isAfter(
+            LocalDate.now()) || LocalDate.parse(session.session_date).isEqual(LocalDate.now()))
         }
         rcv_subscribed.adapter = SubscribeRecyclerAdapter(session_filtered as ArrayList<Session>, this)
     }
@@ -50,7 +51,7 @@ class SubscribedSessionActivity : AppCompatActivity(),SubscribeRecyclerAdapter.O
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onDeleteClick(item: Session, position: Int) {
         val final_session = session_subscribed.filterNot { session -> session.id == item.id }
-        this.setRecyclerViewAdapter(final_session)
+
         val subscribed_int=session_subscribed_int.filterNot {itr -> itr == item.id}
 
         student = Student(username =username,name = name,isadmin = is_admin,student_session_list = subscribed_int)
@@ -60,5 +61,12 @@ class SubscribedSessionActivity : AppCompatActivity(),SubscribeRecyclerAdapter.O
                 error-> Log.e("Error","Error aa gaya")
 
             }
+        if (final_session.isNullOrEmpty()){
+            Toast.makeText(this,"Sessiion list is empty", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+        session_subscribed_int= subscribed_int as ArrayList<Int>
+        session_subscribed= final_session as ArrayList<Session>
+        this.setRecyclerViewAdapter(final_session)
     }
 }

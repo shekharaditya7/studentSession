@@ -2,6 +2,7 @@ package com.example.studentsessionapp.services
 
 import com.example.studentsessionapp.models.Session
 import com.example.studentsessionapp.models.Student
+import io.reactivex.Completable
 import io.reactivex.Observable
 
 class ApiClient {
@@ -28,7 +29,7 @@ class ApiClient {
     fun loadStudentListData():Observable<List<Student>>{
         return client.getStudentList()
     }
-    fun deleteSessionById(id :Int):Observable<Session>{
+    fun deleteSessionById(id :Int):Completable{
         return client.deleteSession(id)
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -54,8 +55,8 @@ class SessionListActivity : AppCompatActivity() , SessionRecyclerAdapter.OnSessi
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun handleResponse(list: List<Session>) {
-        session_list =list.filter { session -> LocalDate.parse(session.session_date).isAfter(
-            LocalDate.now())
+        session_list =list.filter { session ->(LocalDate.parse(session.session_date).isAfter(
+            LocalDate.now()) || LocalDate.parse(session.session_date).isEqual(LocalDate.now()))
         }
         mAndroidArrayList = ArrayList(session_list)
 
@@ -78,7 +79,16 @@ class SessionListActivity : AppCompatActivity() , SessionRecyclerAdapter.OnSessi
         client.deleteSessionById(item.id).observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe()
+
+
+//                finish()
+//                error-> Log.e("Error","Error aa gaya")
+
         session_list = session_list.filterNot{ itr-> itr.id == item.id  }
+        if (session_list.isNullOrEmpty()){
+            Toast.makeText(this,"Sessiion list is empty",Toast.LENGTH_SHORT).show()
+//            finish()
+        }
         handleResponse(this.session_list)
     }
 }

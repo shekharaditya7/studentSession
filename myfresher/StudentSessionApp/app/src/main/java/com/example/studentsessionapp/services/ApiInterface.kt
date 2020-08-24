@@ -4,6 +4,7 @@ package com.example.studentsessionapp.services
 
 import com.example.studentsessionapp.models.Session
 import com.example.studentsessionapp.models.Student
+import io.reactivex.Completable
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -24,6 +25,6 @@ interface ApiInterface {
     @GET("api/students/")
     fun getStudentList():Observable<List<Student>>
     @DELETE("api/sessions/{id}/")
-    fun deleteSession(@Path("id") id:Int):Observable<Session>
+    fun deleteSession(@Path("id") id:Int):Completable
 
 }

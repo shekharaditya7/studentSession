@@ -36,7 +36,7 @@ class UnsubscribedSessionActivity : AppCompatActivity() , UnSubscribedRecyclerAd
         setContentView(R.layout.activity_unsubcribe_session)
         val bundle: Bundle? = intent.extras
         username = bundle!!.get("USERNAME").toString().trim()
-        name = bundle.get("USERNAME").toString().trim()
+        name = bundle.get("NAME").toString().trim()
         session_subscribed_int = intent.getIntegerArrayListExtra("SUBS_SESSION_INT") as ArrayList<Int>
         session_unsubscribed = intent.getSerializableExtra("UnSubscribed") as ArrayList<Session>
         session_subscribed=intent.getSerializableExtra("Subscribed") as ArrayList<Session>
@@ -50,12 +50,12 @@ class UnsubscribedSessionActivity : AppCompatActivity() , UnSubscribedRecyclerAd
     private fun setRecyclerViewAdapter(list : List <Session>) {
 //        val sdf = SimpleDateFormat("YYYY-MM-DD", Locale.US)
 
-        var session_filtered =list.filter { session -> LocalDate.parse(session.session_date).isAfter(
-            LocalDate.now())
+        var session_filtered =list.filter { session -> (LocalDate.parse(session.session_date).isAfter(
+            LocalDate.now()) || LocalDate.parse(session.session_date).isEqual(LocalDate.now()) )
         }
 //        val date = sdf.parse(Date().toString())
 
-        
+
 //        var session_filtered =list.filter{session -> sdf.parse(session.session_date).after(date) }
 
         rcv_unsubscribed.adapter = UnSubscribedRecyclerAdapter(session_filtered as ArrayList<Session>, this)
@@ -68,7 +68,7 @@ class UnsubscribedSessionActivity : AppCompatActivity() , UnSubscribedRecyclerAd
         val subs_session = session_unsubscribed.filter { session -> session.id == item.id }
         val checkSession = checkSubscribedSession(session_subscribed , subs_session[0])
         if (checkSession == true) {
-            this.setRecyclerViewAdapter(final_session_list)
+
             session_subscribed_int.add(item.id)
             session_subscribed.add(subs_session[0])
             student = Student(
@@ -82,6 +82,13 @@ class UnsubscribedSessionActivity : AppCompatActivity() , UnSubscribedRecyclerAd
                 .subscribe { error ->
                     Log.e("Error", "Error aa gaya")
                 }
+            if (final_session_list.isNullOrEmpty())
+            {
+                Toast.makeText(this,"Sessiion list is empty",Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            session_unsubscribed= final_session_list as ArrayList<Session>
+            this.setRecyclerViewAdapter(final_session_list)
         }
         else{
             Toast.makeText(this, "Same slot and same date session cannot be subscribed",Toast.LENGTH_SHORT).show()
