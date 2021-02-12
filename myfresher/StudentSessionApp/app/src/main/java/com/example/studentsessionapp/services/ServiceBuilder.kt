@@ -7,7 +7,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceBuilder {
-    private const val URL="http://192.168.29.231:8000/"
+    private const val URL="http://192.168.1.7:8000/"
 
     //create Logger
     private val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)

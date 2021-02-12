@@ -4,6 +4,7 @@ import './App.css';
 import {
   BrowserRouter,
   NavLink,
+  Redirect,
   Link,
   Switch,
   Route
@@ -14,14 +15,44 @@ import StudentProfile from './Components/StudentProfile.js'
 import Admin from './Components/Admin.js'
 
 
-function App() {
+
+
+
+
+class App extends React.Component{
+  
+  state = {
+    redir : false,
+    username : '',
+  };
+
+  Login = () =>{
+  
+  var x = document.getElementById('username').value;
+  console.log(x)
+  this.setState({redir:true, username:x})
+  }
+
+
+  render(){
+
+   console.log(this.state.username);
+   if(this.state.redir==true){
+    var user = this.state.username
+    return <Redirect to={{
+      pathname:'/user/:adi'
+    }}/>
+   } 
+
   return (
     <div className="App">
       <header className="App-header">
       <p> Welcome! </p>
+   
+      <br/>
+      
         <BrowserRouter>
           <Switch>
-          <Route exact path="/admin/user/:id" component={StudentProfile}/>
           <Route exact path="/admin" component={Admin} />
           <Route exact path="/user/:id" component={StudentProfile} />
           </Switch>
@@ -29,7 +60,9 @@ function App() {
         
       </header>
     </div>
-  );
+  )
+
+  }
 }
 
 export default App;

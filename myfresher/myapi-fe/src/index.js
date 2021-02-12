@@ -11,10 +11,13 @@ import {
   Route
 } from "react-router-dom";
 
+    console.log(React.version)
+
 ReactDOM.render(
   <React.StrictMode>
-    
-    <App />
+
+
+    <BrowserRouter><App/></BrowserRouter>
     
   </React.StrictMode>,
   document.getElementById('root')

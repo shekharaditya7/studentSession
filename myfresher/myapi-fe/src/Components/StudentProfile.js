@@ -20,12 +20,29 @@ state = {
 };
 
 
-removeHandler = (id) => {
-	console.log(id);
+removeHandler = (id, slot, date) => {
+	
+
+	let hr = this.giveHours(slot)
+	let temp = new Date(date)
+	temp.setHours(hr)
+	let cur = new Date()
+
+	console.log(cur.getTime())
+	console.log(temp.getTime())
+
+	if(cur.getFullYear()===temp.getFullYear() && cur.getMonth()===temp.getMonth() && cur.getDate()===temp.getDate() && cur.getTime()>=temp.getTime() ){
+			alert("Can't Remove Past Session")
+			return;
+		
+	}
+
+	else{
+
+		console.log(id);
 	let updated = this.state.sessions;
 	const index = updated.indexOf(id);
 	updated.splice(index, 1);
-
 
 	const user = {
 		username: this.state.username,
@@ -41,14 +58,40 @@ removeHandler = (id) => {
 	}).catch(error => {
 			alert("Couldnt Remove")
 	})
+	}
 }
 
+
+giveHours = (hr) => {
+	if(hr=='1')
+		return 8
+	else if(hr=='2')
+		return 10
+	else if(hr=='3')
+		return 14
+}
 
 
 
 addHandler = (id, slot, date, all) => {
 	console.log(id);
 	let updated = this.state.sessions;
+
+	let hr = this.giveHours(slot)
+	let temp = new Date(date)
+	temp.setHours(hr)
+	let cur = new Date()
+
+	console.log(temp.getHours())
+	console.log(cur.getHours())
+
+	if(cur.getFullYear()===temp.getFullYear() && cur.getMonth()===temp.getMonth() && cur.getDate()===temp.getDate()){
+		if(cur.getTime()>=temp.getTime()){
+			alert("Can't Add Past Session")
+			return;
+		}
+	}
+	
 
 	var ok = true;
 	for(var i=0; i<all.length; i++){
@@ -167,7 +210,7 @@ render() {
 	for(var i = 0; i<allid.length; i++){
 
 		var temp = new Date(all[i].session_date);
-		if(temp>cur){
+		if(temp.getFullYear()>=cur.getFullYear() && temp.getMonth() >= cur.getMonth() && temp.getDate() >= cur.getDate()){
 		if(check(sub, allid[i])==false){
 			notSubscribed[k] = all[i];
 			k++;
@@ -202,7 +245,7 @@ render() {
 					Title:{session.title} <br/>  
 					Slot No : {this.showSlot(session.slots)} <br/> 
 					Date : {session.session_date} <br/>
-					<button onClick={() => this.removeHandler(session.id)}> Remove </button>
+					<button onClick={() => this.removeHandler(session.id, session.slots, session.session_date)}> Remove </button>
 					</li>						
 		 )}
 		 </ol>
