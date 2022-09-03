@@ -1,2 +1,0 @@
-# studentSession
-Student Session Booking 
