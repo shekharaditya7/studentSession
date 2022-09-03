@@ -1,0 +1,5 @@
+django==4.1
+django-cors-headers==3.13.0
+django-redis==5.2.0
+djangorestframework==3.13.0
+redi==4.3.4
